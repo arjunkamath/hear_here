@@ -13,9 +13,7 @@ $( document ).on( "pageinit", "#main-page", function() {
             $("#latLongText").text(latLongResponse);
             console.log(latLongResponse);
 
-            var address = getAddress(pos.coords.latitude, pos.coords.longitude);
-            //console.log(address)
-            //$("#addressText").text(address); // geocode the lat/long into an address
+            var gotTextAddress = getAddress(pos.coords.latitude, pos.coords.longitude);
         }
         function fail(error) {
             drawMap(defaultLatLng);  // Failed to find location, show default map
@@ -47,10 +45,9 @@ $( document ).on( "pageinit", "#main-page", function() {
 
         geocoder.geocode({'latLng': location}, function (results, status) {
             if(status == google.maps.GeocoderStatus.OK) { 
-		console.log("I dont get this");
                 $("#addressText").text(results[0].formatted_address);
                 console.log(results[0].formatted_address);  // if address found, pass to processing function
-                return true;  // if address found, pass to processing function
+                return true;  // if address found, return true
             }
             else {
                 alert("Geocode failure: " + status);  // alert any other error(s)

@@ -21,9 +21,9 @@
 		<div role="main" class="ui-content">
 			<div class="ui-grid-a">
                         	<div class="ui-block-a">
-                                	<div class="ui-bar" style="height:100px">
+                                	<div style="height:100px">
                                         	<strong>You are here</strong>
-                                        	<p id="addressText"></p>
+                                        	<p id="addressText" style="width:90%"></p>
                                 	</div>
                         	</div>
                        	 	<div class="ui-block-b">
@@ -34,22 +34,24 @@
         	                        </div>
                 	        </div>
 	                </div>
-                	<strong>What people said when they were here</strong>
+                	<strong>Comments</strong>
                         <ul data-role="listview" data-inset="true">
-				<li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>
+				<li data-role="list-divider"> #Tourism <span class="ui-li-count">2</span></li>
     				<li>
 					<p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
 				</li>
 				<li>
 					<p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
 				</li>
-				<li data-role="list-divider">Thursday, October 7, 2010 <span class="ui-li-count">1</span></li>
+				<li data-role="list-divider"> #Helpful <span class="ui-li-count">1</span></li>
 				<li>
 					<p>Sure, let's plan on meeting at Highland Kitchen at 8:00 tonight. Can't wait!</p>
 				</li>
+				<li data-role="list-divider"> Add comment <span class="ui-li-count">1</span></li>
+				<li>
+	                		<input name="text-basic" id="text-basic" value="" type="text">
+				</li>
 			</ul>
-	                <strong>Add comment</strong>
-	                <input name="text-basic" id="text-basic" value="" type="text">
     		</div>
 	</div><!-- /content -->
 </body>

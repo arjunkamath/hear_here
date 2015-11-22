@@ -2,12 +2,20 @@
  * Google Maps documentation: http://code.google.com/apis/maps/documentation/javascript/basics.html
  * Geolocation documentation: http://dev.w3.org/geo/api/spec-source.html
  */
-$( document ).on( "pageinit", "#map-page", function() {
+$( document ).on( "pageinit", "#main-page", function() {
     var defaultLatLng = new google.maps.LatLng(34.0983425, -118.3267434);  // Default to Hollywood, CA when no geolocation support
     if ( navigator.geolocation ) {
         function success(pos) {
             // Location found, show map with these coordinates
             drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+
+            var latLongResponse = 'Lat: ' + pos.coords.latitude + ' Long: ' + pos.coords.longitude;  // build string containing lat/long
+            $("#latLongText").text(latLongResponse);
+            console.log(latLongResponse);
+
+            var address = getAddress(pos.coords.latitude, pos.coords.longitude);
+            //console.log(address)
+            //$("#addressText").text(address); // geocode the lat/long into an address
         }
         function fail(error) {
             drawMap(defaultLatLng);  // Failed to find location, show default map
@@ -17,6 +25,7 @@ $( document ).on( "pageinit", "#map-page", function() {
     } else {
         drawMap(defaultLatLng);  // No geolocation support, show default map
     }
+
     function drawMap(latlng) {
         var myOptions = {
             zoom: 10,
@@ -29,6 +38,24 @@ $( document ).on( "pageinit", "#map-page", function() {
             position: latlng,
             map: map,
             title: "Greetings!"
+        });
+    }
+
+    function getAddress(myLatitude,myLongitude) {
+        var geocoder = new google.maps.Geocoder();  // create a geocoder object
+        var location = new google.maps.LatLng(myLatitude, myLongitude);  // turn coordinates into an object
+
+        geocoder.geocode({'latLng': location}, function (results, status) {
+            if(status == google.maps.GeocoderStatus.OK) { 
+		console.log("I dont get this");
+                $("#addressText").text(results[0].formatted_address);
+                console.log(results[0].formatted_address);  // if address found, pass to processing function
+                return true;  // if address found, pass to processing function
+            }
+            else {
+                alert("Geocode failure: " + status);  // alert any other error(s)
+                return false;
+            }
         });
     }
 });

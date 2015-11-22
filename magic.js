@@ -1,48 +1,35 @@
-function success(position) {
-  var s = document.querySelector('#status');
-  
-  if (s.className == 'success') {
-    // not sure why we're hitting this twice in FF, I think it's to do with a cached result coming back    
-    return;
-  }
-  
-  s.innerHTML = "found you!";
-  s.className = 'success';
-  
-  var mapcanvas = document.createElement('div');
-  mapcanvas.id = 'mapcanvas';
-  mapcanvas.style.height = '400px';
-  mapcanvas.style.width = '560px';
-    
-  document.querySelector('article').appendChild(mapcanvas);
-  
-  var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-  var myOptions = {
-    zoom: 15,
-    center: latlng,
-    mapTypeControl: false,
-    navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-  var map = new google.maps.Map(document.getElementById("mapcanvas"), myOptions);
-  
-  var marker = new google.maps.Marker({
-      position: latlng, 
-      map: map, 
-      title:"You are here! (at least within a "+position.coords.accuracy+" meter radius)"
-  });
-}
+/*
+ * Google Maps documentation: http://code.google.com/apis/maps/documentation/javascript/basics.html
+ * Geolocation documentation: http://dev.w3.org/geo/api/spec-source.html
+ */
+$( document ).on( "pageinit", "#map-page", function() {
+    var defaultLatLng = new google.maps.LatLng(34.0983425, -118.3267434);  // Default to Hollywood, CA when no geolocation support
+    if ( navigator.geolocation ) {
+        function success(pos) {
+            // Location found, show map with these coordinates
+            drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+        }
+        function fail(error) {
+            drawMap(defaultLatLng);  // Failed to find location, show default map
+        }
+        // Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
+        navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy:true, timeout: 6000});
+    } else {
+        drawMap(defaultLatLng);  // No geolocation support, show default map
+    }
+    function drawMap(latlng) {
+        var myOptions = {
+            zoom: 10,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+        // Add an overlay to the map of current lat/lng
+        var marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            title: "Greetings!"
+        });
+    }
+});
 
-function error(msg) {
-  var s = document.querySelector('#status');
-  s.innerHTML = typeof msg == 'string' ? msg : "failed";
-  s.className = 'fail';
-  
-  // console.log(arguments);
-}
-
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(success, error);
-} else {
-  error('not supported');
-}
